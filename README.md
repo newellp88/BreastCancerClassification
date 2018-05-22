@@ -49,7 +49,7 @@ rf_acc = metrics.accuracy_score(prediction, test_y)
 Finally, we will want to know how our models fared in general and against each other:
 
 
-![model comparison](Model_comparision.png)
+![model comparison](/graphs/Model_comparision.png)
 
 
 Not too bad. Although, we should probably test more input data and features before we get too excited.
