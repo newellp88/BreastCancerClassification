@@ -12,7 +12,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn import metrics
 from sklearn import svm
 
-data_file = 'breast_data.csv'
+data_file = 'cancer_data.csv'
+graphs = 'graphs/'
 
 # clean up the dataframe
 df = pd.read_csv(data_file)
@@ -28,22 +29,28 @@ features_worst = list(df.columns[21:31])
 df["diagnosis"] = df["diagnosis"].map({'M':1,'B':0})
 
 # explore the data now
+"""
 bars = sns.countplot(df['diagnosis'],label="Count")
 bars = bars.get_figure()
-bars.suptitle('Is it breast cancer?')
-bars.savefig('breat_cancer_classification.png')
+bars.suptitle('Data visualization 1: Cancer, 0: Not cancer')
+bars.savefig(graphs + 'data_viz.png')
 bars.show()
-
+"""
 # feature selection, exploring correlation
 corr = df[features_mean].corr()
-heat = sns.heatmap(corr, cbar=True, square=True, annot=True,
+"""
+heat = sns.heatmap(corr, cbar=True, square=True, annot=True, linewidths=1.0,
 				fmt='.2f', annot_kws={'size':15}, xticklabels=features_mean,
 				yticklabels=features_mean, cmap='coolwarm')
 heat = heat.get_figure()
 heat.suptitle('Feature Heatmap')
-heat.savefig('feature_heatmap.png')
+heat.savefig(graphs + 'feature_heatmap.png')
 heat.show()
 
+cluster = sns.clustermap(corr, cmap='mako')
+cluster.savefig(graphs + 'feature_clustermap.png')
+plt.show()
+"""
 """
 Observations:
 	1. the radius, perimeter, and area are highly correlated as expected fromtheir relation. From the we can use any one of them as a feature
@@ -63,13 +70,15 @@ test_y = test.diagnosis
 model = RandomForestClassifier(n_estimators = 100)
 model.fit(train_X, train_y)
 prediction = model.predict(test_X)
-print("Random Forest accuracy: ", metrics.accuracy_score(prediction, test_y))
+rf_acc = metrics.accuracy_score(prediction, test_y)
+print("Random Forest accuracy: ", rf_acc)
 
 # SVM model
 model = svm.SVC()
 model.fit(train_X, train_y)
 prediction = model.predict(test_X)
-print("SVM accuracy ", metrics.accuracy_score(prediction, test_y))
+svm_acc = metrics.accuracy_score(prediction, test_y)
+print("SVM accuracy ", svm_acc)
 
 # build models using all the features
 prediction_var = features_mean
@@ -82,4 +91,24 @@ test_y = test.diagnosis
 model = RandomForestClassifier(n_estimators = 100)
 model.fit(train_X, train_y)
 prediction = model.predict(test_X)
-print("All features used, Random Forest accuracy: ", metrics.accuracy_score(prediction, test_y))
+rff_acc = metrics.accuracy_score(prediction, test_y)
+print("All features used, Random Forest accuracy: ", rff_acc)
+
+# make a barchart to compare the three classification models
+# seaborn's barchart is a bit complicated, using matplotlib instead
+acc = {'RandomForest':rf_acc, 'SVM':svm_acc, 'FullFeature':rff_acc}
+title = 'Model comparision'
+bar = plt.bar(range(len(acc)), list(acc.values()), align='center', color='g')
+plt.xticks(range(len(acc)), list(acc.keys()))
+plt.ylabel('Model accuracy')
+plt.xlabel('Model name/type')
+plt.title(title)
+rects = bar.patches
+for rec in rects:
+	h = rec.get_height()
+	label = ('%.2f' % (h * 100)) + '%'
+	x = rec.get_x() + rec.get_width() / 2.0
+	plt.annotate(label, (x,h), xytext=(0,10),
+				textcoords='offset points',ha='center',va='top')
+plt.savefig(graphs + '%s.png' % (title))
+plt.show()
