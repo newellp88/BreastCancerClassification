@@ -8,11 +8,9 @@ Exploratory machine learning/classification set of breast cancer data. The data 
 
 When we look at the features, we can see that there isn't a lot of correlation between the inputs of this dataset which explains why machine learning might be useful in the medical industry.
 
-![heatmap](/graphs/feature_heatmap.png)
-
 ![clustermap](/graphs/feature_clustermap.png)
 
-In both of these correlation graphs we see just a few 'hot' areas of high positive correlation and three 'cool' areas of strong negative correlation. Otherwise, we've got swimming temperatures.
+The clustermap highlights just a few 'hot' areas of high positive correlation and three 'cool' areas of strong negative correlation. Otherwise, we've got swimming temperatures.
 
 ## Setting up the models
 
@@ -50,7 +48,7 @@ rf_acc = metrics.accuracy_score(prediction, test_y)
 
 Finally, we will want to know how our models fared in general and against each other:
 
-![model comparison](Model comparision.png)
+![model comparison](Model_comparision.png)
 
 Not too bad. Although, we should probably test more input data and features before we get too excited.
 
