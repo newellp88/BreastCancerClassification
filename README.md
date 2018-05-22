@@ -1,6 +1,6 @@
 # Introduction
 
-Data from old ["Kaggle.com"](https://www.kaggle.com/uciml/breast-cancer-wisconsin-data) competition.
+Data from an old ["Kaggle.com"](https://www.kaggle.com/uciml/breast-cancer-wisconsin-data) competition.
 
 Exploratory machine learning/classification set of breast cancer data. The data itself is pretty straightforward, roughly 2/3 of the patients don't have cancer and about 1/3 do.
 
